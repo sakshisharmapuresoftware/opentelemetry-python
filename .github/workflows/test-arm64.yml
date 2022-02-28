@@ -23,17 +23,16 @@ jobs:
     - name: Set up QEMU
       id: qemu
       uses: docker/setup-qemu-action@v1
+    - name: Set up Python ${{ env[matrix.python-version] }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ env[matrix.python-version] }}
+        architecture: 'aarch64'
     - name: Test tox
       run: |
             docker run --rm -v ${{ github.workspace }}:/io:rw --workdir=/io \
             arm64v8/ubuntu \
             bash -exc 'apt-get update && \
-            apt install software-properties-common -y && \
-            add-apt-repository ppa:deadsnakes/ppa -y && \
-            apt install -y ${{ matrix.python-version }} && \
-            apt install -y ${{ matrix.python-version }}-venv && \
-            ${{ matrix.python-version }} -m venv .env && \
-            source .env/bin/activate && \
             uname -m && \
             pip install --upgrade pip && \
             pip install -U tox-factor && \
@@ -53,17 +52,16 @@ jobs:
     - name: Set up QEMU
       id: qemu
       uses: docker/setup-qemu-action@v1
+    - name: Set up Python ${{ env[matrix.python-version] }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ env[matrix.python-version] }}
+        architecture: 'aarch64'
     - name: Test Misc
       run: |
             docker run --rm -v ${{ github.workspace }}:/io:rw --workdir=/io \
             arm64v8/ubuntu \
             bash -exc 'apt-get update && \
-            apt install software-properties-common -y && \
-            add-apt-repository ppa:deadsnakes/ppa -y && \
-            apt install -y ${{ matrix.python-version }} && \
-            apt install -y ${{ matrix.python-version }}-venv && \
-            ${{ matrix.python-version }} -m venv .env && \
-            source .env/bin/activate && \
             uname -m && \
             pip install --upgrade pip && \
             pip install -U tox && \
@@ -83,17 +81,16 @@ jobs:
     - name: Set up QEMU
       id: qemu
       uses: docker/setup-qemu-action@v1
+    - name: Set up Python ${{ env[matrix.python-version] }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ env[matrix.python-version] }}
+        architecture: 'aarch64'
     - name: Test contrib build
       run: |
             docker run --rm -v ${{ github.workspace }}:/io:rw --workdir=/io \
             arm64v8/ubuntu \
             bash -exc 'apt-get update && \
-            apt install software-properties-common -y && \
-            add-apt-repository ppa:deadsnakes/ppa -y && \
-            apt install -y ${{ matrix.python-version }} && \
-            apt install -y ${{ matrix.python-version }}-venv && \
-            ${{ matrix.python-version }} -m venv .env && \
-            source .env/bin/activate && \
             uname -m && \
             pip install --upgrade pip && \
             pip install -U tox-factor && \
