@@ -11,11 +11,11 @@ jobs:
     strategy:
       matrix:
         config:
-        - { version: "3.6", experimental: false }
-        - { version: "3.7", experimental: false }
-        - { version: "3.8", experimental: false }
-        - { version: "3.9", experimental: false }
-        - { version: "3.10", experimental: false }
+        - { version: "3.6" }
+        - { version: "3.7" }
+        - { version: "3.8" }
+        - { version: "3.9" }
+        - { version: "3.10" }
         package: ["api", "sdk", "semantic", "getting", "shim", "exporter", "protobuf", "propagator"]
         os: [ ubuntu-20.04 ]
       fail-fast: false
@@ -29,10 +29,6 @@ jobs:
     - name: Set up QEMU
       id: qemu
       uses: docker/setup-qemu-action@v1
-    - name: Download Wheel
-      uses: actions/download-artifact@v1
-      with:
-        name: aarch64_wheel_${{ matrix.config.version }}
     - name: Test tox
       run: |
             docker run --rm -v ${{ github.workspace }}:/io:rw --workdir=/io \
@@ -53,7 +49,7 @@ jobs:
     strategy:
       matrix:
         config:
-        - { version: "3.9", experimental: false }
+        - { version: "3.9" }
         tox-environment: [ "docker-tests", "lint", "docs", "mypy", "mypyinstalled", "tracecontext" ]
       fail-fast: false
     env:
@@ -85,7 +81,7 @@ jobs:
     strategy:
       matrix:
         config:
-        - { version: "3.6", experimental: false }
+        - { version: "3.6" }
         package: ["instrumentation", "exporter"]
       fail-fast: false
     env:
