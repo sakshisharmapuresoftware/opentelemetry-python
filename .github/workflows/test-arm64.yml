@@ -10,18 +10,12 @@ jobs:
   build-arm64:
     strategy:
       matrix:
-        config:
-        - { version: "3.6" }
-        - { version: "3.7" }
-        - { version: "3.8" }
-        - { version: "3.9" }
-        - { version: "3.10" }
+        python-version: [ py36, py37, py38, py39, py310 ]
         package: ["api", "sdk", "semantic", "getting", "shim", "exporter", "protobuf", "propagator"]
         os: [ ubuntu-20.04 ]
       fail-fast: false
     env:
-      py: py${{ matrix.config.version }}
-      RUN_MATRIX_COMBINATION: py${{ matrix.config.version }}-${{ matrix.package }}-${{ matrix.os }}
+      RUN_MATRIX_COMBINATION: ${{ matrix.python-version }}-${{ matrix.package }}-${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     steps:
     - name: Checkout
@@ -36,25 +30,22 @@ jobs:
             bash -exc 'apt-get update && \
             apt install software-properties-common -y && \
             add-apt-repository ppa:deadsnakes/ppa -y && \
-            apt install -y ${{ env.py }} && \
-            apt install -y ${{ env.py }}-venv && \
-            ${{ env.py }} -m venv .env && \
+            apt install -y ${{ matrix.python-version }} && \
+            apt install -y ${{ matrix.python-version }}-venv && \
+            ${{ matrix.python-version }} -m venv .env && \
             source .env/bin/activate && \
             uname -m && \
             pip install --upgrade pip && \
             pip install -U tox-factor && \
-            tox -f ${{ env.py }}-${{ matrix.package }} -- --benchmark-json=${{ env.RUN_MATRIX_COMBINATION }}-benchmark.json && \
+            tox -f ${{ matrix.python-version }}-${{ matrix.package }} -- --benchmark-json=${{ env.RUN_MATRIX_COMBINATION }}-benchmark.json && \
             deactivate'
             
   build-misc-arm64:
     strategy:
       matrix:
-        config:
-        - { version: "3.9" }
+        python-version: [ py39 ]
         tox-environment: [ "docker-tests", "lint", "docs", "mypy", "mypyinstalled", "tracecontext" ]
       fail-fast: false
-    env:
-      py: py${{ matrix.config.version }}
     runs-on: ubuntu-20.04
     steps:
     - name: Checkout
@@ -69,9 +60,9 @@ jobs:
             bash -exc 'apt-get update && \
             apt install software-properties-common -y && \
             add-apt-repository ppa:deadsnakes/ppa -y && \
-            apt install -y ${{ env.py }} && \
-            apt install -y ${{ env.py }}-venv && \
-            ${{ env.py }} -m venv .env && \
+            apt install -y ${{ matrix.python-version }} && \
+            apt install -y ${{ matrix.python-version }}-venv && \
+            ${{ matrix.python-version }} -m venv .env && \
             source .env/bin/activate && \
             uname -m && \
             pip install --upgrade pip && \
@@ -82,12 +73,9 @@ jobs:
   build-contrib-arm64:
     strategy:
       matrix:
-        config:
-        - { version: "3.6" }
+        python-version: [ py36 ]
         package: ["instrumentation", "exporter"]
       fail-fast: false
-    env:
-      py: py${{ matrix.config.version }}
     runs-on: ubuntu-20.04
     steps:
     - name: Checkout
@@ -102,12 +90,12 @@ jobs:
             bash -exc 'apt-get update && \
             apt install software-properties-common -y && \
             add-apt-repository ppa:deadsnakes/ppa -y && \
-            apt install -y ${{ env.py }} && \
-            apt install -y ${{ env.py }}-venv && \
-            ${{ env.py }} -m venv .env && \
+            apt install -y ${{ matrix.python-version }} && \
+            apt install -y ${{ matrix.python-version }}-venv && \
+            ${{ matrix.python-version }} -m venv .env && \
             source .env/bin/activate && \
             uname -m && \
             pip install --upgrade pip && \
             pip install -U tox-factor && \
-            tox -f ${{ env.py }}-${{ matrix.package }} && \
+            tox -f ${{ matrix.python-version }}-${{ matrix.package }} && \
             deactivate'
