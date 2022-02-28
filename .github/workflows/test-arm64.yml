@@ -55,7 +55,7 @@ jobs:
         config:
         - { version: "3.9", experimental: false }
         tox-environment: [ "docker-tests", "lint", "docs", "mypy", "mypyinstalled", "tracecontext" ]
-        fail-fast: false
+      fail-fast: false
     env:
       py: python${{ matrix.config.version }}
     runs-on: ubuntu-20.04
