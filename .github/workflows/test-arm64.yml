@@ -8,7 +8,6 @@ on:
 
 jobs:
   build-arm64:
-    needs: Build-aarch64
     strategy:
       matrix:
         config:
@@ -51,7 +50,6 @@ jobs:
             deactivate'
             
   build-misc-arm64:
-    needs: Build-aarch64
     strategy:
       matrix:
         config:
@@ -83,8 +81,7 @@ jobs:
             tox -e ${{ matrix.tox-environment }} && \
             deactivate'
 
-build-contrib-build-arm64:
-    needs: Build-aarch64
+  build-contrib-arm64:
     strategy:
       matrix:
         config:
