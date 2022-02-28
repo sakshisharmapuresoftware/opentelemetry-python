@@ -87,7 +87,7 @@ jobs:
         config:
         - { version: "3.6", experimental: false }
         package: ["instrumentation", "exporter"]
-        fail-fast: false
+      fail-fast: false
     env:
       py: python${{ matrix.config.version }}
     runs-on: ubuntu-20.04
