@@ -21,7 +21,7 @@ jobs:
       fail-fast: false
     env:
       py: py${{ matrix.config.version }}
-      RUN_MATRIX_COMBINATION: ${{ env.py }}-${{ matrix.package }}-${{ matrix.os }}
+      RUN_MATRIX_COMBINATION: py${{ matrix.config.version }}-${{ matrix.package }}-${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     steps:
     - name: Checkout
