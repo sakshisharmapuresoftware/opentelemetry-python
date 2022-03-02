@@ -30,10 +30,9 @@ jobs:
             docker run --rm -v ${{ github.workspace }}:/io:rw --workdir=/io \
             arm64v8/ubuntu \
             bash -exc 'apt-get update && \
-            apt install -y git && \
             apt install software-properties-common -y && \
             add-apt-repository ppa:deadsnakes/ppa -y && \
-            apt install -y ${{ env.py }} && \
+            apt install -y ${{ env.py }} git && \
             apt install -y ${{ env.py }}-venv && \
             ${{ env.py }} -m venv .env && \
             source .env/bin/activate && \
@@ -65,10 +64,9 @@ jobs:
             docker run --rm -v ${{ github.workspace }}:/io:rw --workdir=/io \
             arm64v8/ubuntu \
             bash -exc 'apt-get update && \
-            apt install -y git && \
             apt install software-properties-common -y && \
             add-apt-repository ppa:deadsnakes/ppa -y && \
-            apt install -y ${{ env.py }} && \
+            apt install -y ${{ env.py }} git && \
             apt install -y ${{ env.py }}-venv && \
             ${{ env.py }} -m venv .env && \
             source .env/bin/activate && \
@@ -100,10 +98,9 @@ jobs:
             docker run --rm -v ${{ github.workspace }}:/io:rw --workdir=/io \
             arm64v8/ubuntu \
             bash -exc 'apt-get update && \
-            apt install -y git && \
             apt install software-properties-common -y && \
             add-apt-repository ppa:deadsnakes/ppa -y && \
-            apt install -y ${{ env.py }} && \
+            apt install -y ${{ env.py }} git && \
             apt install -y ${{ env.py }}-venv && \
             ${{ env.py }} -m venv .env && \
             source .env/bin/activate && \
@@ -135,10 +132,9 @@ jobs:
             docker run --rm -v ${{ github.workspace }}:/io:rw --workdir=/io \
             arm64v8/ubuntu \
             bash -exc 'apt-get update && \
-            apt install -y git && \
             apt install software-properties-common -y && \
             add-apt-repository ppa:deadsnakes/ppa -y && \
-            apt install -y ${{ env.py }} && \
+            apt install -y ${{ env.py }} git && \
             apt install -y ${{ env.py }}-venv && \
             ${{ env.py }} -m venv .env && \
             source .env/bin/activate && \
@@ -170,10 +166,9 @@ jobs:
             docker run --rm -v ${{ github.workspace }}:/io:rw --workdir=/io \
             arm64v8/ubuntu \
             bash -exc 'apt-get update && \
-            apt install -y git && \
             apt install software-properties-common -y && \
             add-apt-repository ppa:deadsnakes/ppa -y && \
-            apt install -y ${{ env.py }} && \
+            apt install -y ${{ env.py }} git && \
             apt install -y ${{ env.py }}-venv && \
             ${{ env.py }} -m venv .env && \
             source .env/bin/activate && \
@@ -203,10 +198,9 @@ jobs:
             docker run --rm -v ${{ github.workspace }}:/io:rw --workdir=/io \
             arm64v8/ubuntu \
             bash -exc 'apt-get update && \
-            apt install -y git && \
             apt install software-properties-common -y && \
             add-apt-repository ppa:deadsnakes/ppa -y && \
-            apt install -y ${{ env.py }} && \
+            apt install -y ${{ env.py }} git && \
             apt install -y ${{ env.py }}-venv && \
             ${{ env.py }} -m venv .env && \
             source .env/bin/activate && \
@@ -236,10 +230,9 @@ jobs:
             docker run --rm -v ${{ github.workspace }}:/io:rw --workdir=/io \
             arm64v8/ubuntu \
             bash -exc 'apt-get update && \
-            apt install -y git && \
             apt install software-properties-common -y && \
             add-apt-repository ppa:deadsnakes/ppa -y && \
-            apt install -y ${{ env.py }} && \
+            apt install -y ${{ env.py }} git && \
             apt install -y ${{ env.py }}-venv && \
             ${{ env.py }} -m venv .env && \
             source .env/bin/activate && \
