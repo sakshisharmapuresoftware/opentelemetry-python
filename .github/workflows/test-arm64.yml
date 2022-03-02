@@ -1,4 +1,4 @@
-name: Core Repo ARM Tests
+name: Core Repo ARM64 Tests
 
 on:
   push:
