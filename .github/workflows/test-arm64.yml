@@ -7,21 +7,17 @@ on:
   pull_request:
 
 jobs:
-  build-arm64:
+  build-arm64-36:
     strategy:
       matrix:
         config:
         - { version: "3.6" }
-        - { version: "3.7" }
-        - { version: "3.8" }
-        - { version: "3.9" }
-        - { version: "3.10" }
         package: ["api", "sdk", "semantic", "getting", "shim", "exporter", "protobuf", "propagator"]
         os: [ ubuntu-20.04 ]
       fail-fast: false
     env:
-      python: py${{ matrix.config.version }}
-      RUN_MATRIX_COMBINATION: ${{ matrix.config.version }}-${{ matrix.package }}-${{ matrix.os }}
+      py: python${{ matrix.config.version }}
+      RUN_MATRIX_COMBINATION: py36-${{ matrix.package }}-${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     steps:
     - name: Checkout
@@ -36,13 +32,149 @@ jobs:
             bash -exc 'apt-get update && \
             apt install software-properties-common -y && \
             add-apt-repository ppa:deadsnakes/ppa -y && \
-            apt install -y ${{ env.python }} && \
-            apt install -y ${{ env.python }}-venv && \
-            ${{ env.python }} -m venv .env && \
+            apt install -y ${{ env.py }} && \
+            apt install -y ${{ env.py }}-venv && \
+            ${{ env.py }} -m venv .env && \
             source .env/bin/activate && \
             pip install --upgrade pip && \
             pip install -U tox-factor && \
-            tox -f ${{ env.python }}-${{ matrix.package }} -- --benchmark-json=${{ env.RUN_MATRIX_COMBINATION }}-benchmark.json && \
+            tox -f py36-${{ matrix.package }} -- --benchmark-json=${{ env.RUN_MATRIX_COMBINATION }}-benchmark.json && \
+            deactivate'
+            
+  build-arm64-37:
+    strategy:
+      matrix:
+        config:
+        - { version: "3.7" }
+        package: ["api", "sdk", "semantic", "getting", "shim", "exporter", "protobuf", "propagator"]
+        os: [ ubuntu-20.04 ]
+      fail-fast: false
+    env:
+      py: python${{ matrix.config.version }}
+      RUN_MATRIX_COMBINATION: py37-${{ matrix.package }}-${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Set up QEMU
+      id: qemu
+      uses: docker/setup-qemu-action@v1
+    - name: Test tox
+      run: |
+            docker run --rm -v ${{ github.workspace }}:/io:rw --workdir=/io \
+            arm64v8/ubuntu \
+            bash -exc 'apt-get update && \
+            apt install software-properties-common -y && \
+            add-apt-repository ppa:deadsnakes/ppa -y && \
+            apt install -y ${{ env.py }} && \
+            apt install -y ${{ env.py }}-venv && \
+            ${{ env.py }} -m venv .env && \
+            source .env/bin/activate && \
+            pip install --upgrade pip && \
+            pip install -U tox-factor && \
+            tox -f py37-${{ matrix.package }} -- --benchmark-json=${{ env.RUN_MATRIX_COMBINATION }}-benchmark.json && \
+            deactivate'
+            
+  build-arm64-38:
+    strategy:
+      matrix:
+        config:
+        - { version: "3.8" }
+        package: ["api", "sdk", "semantic", "getting", "shim", "exporter", "protobuf", "propagator"]
+        os: [ ubuntu-20.04 ]
+      fail-fast: false
+    env:
+      py: python${{ matrix.config.version }}
+      RUN_MATRIX_COMBINATION: py38-${{ matrix.package }}-${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Set up QEMU
+      id: qemu
+      uses: docker/setup-qemu-action@v1
+    - name: Test tox
+      run: |
+            docker run --rm -v ${{ github.workspace }}:/io:rw --workdir=/io \
+            arm64v8/ubuntu \
+            bash -exc 'apt-get update && \
+            apt install software-properties-common -y && \
+            add-apt-repository ppa:deadsnakes/ppa -y && \
+            apt install -y ${{ env.py }} && \
+            apt install -y ${{ env.py }}-venv && \
+            ${{ env.py }} -m venv .env && \
+            source .env/bin/activate && \
+            pip install --upgrade pip && \
+            pip install -U tox-factor && \
+            tox -f py38-${{ matrix.package }} -- --benchmark-json=${{ env.RUN_MATRIX_COMBINATION }}-benchmark.json && \
+            deactivate'
+            
+  build-arm64-39:
+    strategy:
+      matrix:
+        config:
+        - { version: "3.9" }
+        package: ["api", "sdk", "semantic", "getting", "shim", "exporter", "protobuf", "propagator"]
+        os: [ ubuntu-20.04 ]
+      fail-fast: false
+    env:
+      py: python${{ matrix.config.version }}
+      RUN_MATRIX_COMBINATION: py39-${{ matrix.package }}-${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Set up QEMU
+      id: qemu
+      uses: docker/setup-qemu-action@v1
+    - name: Test tox
+      run: |
+            docker run --rm -v ${{ github.workspace }}:/io:rw --workdir=/io \
+            arm64v8/ubuntu \
+            bash -exc 'apt-get update && \
+            apt install software-properties-common -y && \
+            add-apt-repository ppa:deadsnakes/ppa -y && \
+            apt install -y ${{ env.py }} && \
+            apt install -y ${{ env.py }}-venv && \
+            ${{ env.py }} -m venv .env && \
+            source .env/bin/activate && \
+            pip install --upgrade pip && \
+            pip install -U tox-factor && \
+            tox -f py39-${{ matrix.package }} -- --benchmark-json=${{ env.RUN_MATRIX_COMBINATION }}-benchmark.json && \
+            deactivate'
+ 
+  build-arm64-310:
+    strategy:
+      matrix:
+        config:
+        - { version: "3.10" }
+        package: ["api", "sdk", "semantic", "getting", "shim", "exporter", "protobuf", "propagator"]
+        os: [ ubuntu-20.04 ]
+      fail-fast: false
+    env:
+      py: python${{ matrix.config.version }}
+      RUN_MATRIX_COMBINATION: py310-${{ matrix.package }}-${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Set up QEMU
+      id: qemu
+      uses: docker/setup-qemu-action@v1
+    - name: Test tox
+      run: |
+            docker run --rm -v ${{ github.workspace }}:/io:rw --workdir=/io \
+            arm64v8/ubuntu \
+            bash -exc 'apt-get update && \
+            apt install software-properties-common -y && \
+            add-apt-repository ppa:deadsnakes/ppa -y && \
+            apt install -y ${{ env.py }} && \
+            apt install -y ${{ env.py }}-venv && \
+            ${{ env.py }} -m venv .env && \
+            source .env/bin/activate && \
+            pip install --upgrade pip && \
+            pip install -U tox-factor && \
+            tox -f py310-${{ matrix.package }} -- --benchmark-json=${{ env.RUN_MATRIX_COMBINATION }}-benchmark.json && \
             deactivate'
             
   build-misc-arm64:
@@ -53,7 +185,7 @@ jobs:
         tox-environment: [ "docker-tests", "lint", "docs", "mypy", "mypyinstalled", "tracecontext" ]
       fail-fast: false
     env:
-      python: py${{ matrix.config.version }}
+      py: python${{ matrix.config.version }}
     runs-on: ubuntu-20.04
     steps:
     - name: Checkout
@@ -68,14 +200,15 @@ jobs:
             bash -exc 'apt-get update && \
             apt install software-properties-common -y && \
             add-apt-repository ppa:deadsnakes/ppa -y && \
-            apt install -y ${{ env.python }} && \
-            apt install -y ${{ env.python }}-venv && \
-            ${{ env.python }} -m venv .env && \
+            apt install -y ${{ env.py }} && \
+            apt install -y ${{ env.py }}-venv && \
+            ${{ env.py }} -m venv .env && \
             source .env/bin/activate && \
             pip install --upgrade pip && \
             pip install -U tox && \
             tox -e ${{ matrix.tox-environment }} && \
             deactivate'
+
   build-contrib-arm64:
     strategy:
       matrix:
@@ -84,7 +217,7 @@ jobs:
         package: ["instrumentation", "exporter"]
       fail-fast: false
     env:
-      python: py${{ matrix.config.version }}
+      py: python${{ matrix.config.version }}
     runs-on: ubuntu-20.04
     steps:
     - name: Checkout
@@ -99,11 +232,11 @@ jobs:
             bash -exc 'apt-get update && \
             apt install software-properties-common -y && \
             add-apt-repository ppa:deadsnakes/ppa -y && \
-            apt install -y ${{ env.python }} && \
-            apt install -y ${{ env.python }}-venv && \
-            ${{ env.python }} -m venv .env && \
+            apt install -y ${{ env.py }} && \
+            apt install -y ${{ env.py }}-venv && \
+            ${{ env.py }} -m venv .env && \
             source .env/bin/activate && \
             pip install --upgrade pip && \
             pip install -U tox-factor && \
-            tox -f ${{ env.python }}-${{ matrix.package }} && \
+            tox -f py36-${{ matrix.package }} && \
             deactivate'
