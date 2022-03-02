@@ -10,12 +10,18 @@ jobs:
   build-arm64:
     strategy:
       matrix:
-        python-version: [ py36, py37, py38, py39, py310 ]
+        config:
+        - { version: "3.6" }
+        - { version: "3.7" }
+        - { version: "3.8" }
+        - { version: "3.9" }
+        - { version: "3.10" }
         package: ["api", "sdk", "semantic", "getting", "shim", "exporter", "protobuf", "propagator"]
         os: [ ubuntu-20.04 ]
       fail-fast: false
     env:
-      RUN_MATRIX_COMBINATION: ${{ matrix.python-version }}-${{ matrix.package }}-${{ matrix.os }}
+      python: py${{ matrix.config.version }}
+      RUN_MATRIX_COMBINATION: ${{ matrix.config.version }}-${{ matrix.package }}-${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     steps:
     - name: Checkout
@@ -23,28 +29,31 @@ jobs:
     - name: Set up QEMU
       id: qemu
       uses: docker/setup-qemu-action@v1
-    - name: Set up Python ${{ env[matrix.python-version] }}
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ env[matrix.python-version] }}
-        architecture: 'aarch64'
     - name: Test tox
       run: |
             docker run --rm -v ${{ github.workspace }}:/io:rw --workdir=/io \
             arm64v8/ubuntu \
             bash -exc 'apt-get update && \
-            uname -m && \
+            apt install software-properties-common -y && \
+            add-apt-repository ppa:deadsnakes/ppa -y && \
+            apt install -y ${{ env.python }} && \
+            apt install -y ${{ env.python }}-venv && \
+            ${{ env.python }} -m venv .env && \
+            source .env/bin/activate && \
             pip install --upgrade pip && \
             pip install -U tox-factor && \
-            tox -f ${{ matrix.python-version }}-${{ matrix.package }} -- --benchmark-json=${{ env.RUN_MATRIX_COMBINATION }}-benchmark.json && \
+            tox -f ${{ env.python }}-${{ matrix.package }} -- --benchmark-json=${{ env.RUN_MATRIX_COMBINATION }}-benchmark.json && \
             deactivate'
             
   build-misc-arm64:
     strategy:
       matrix:
-        python-version: [ py39 ]
+        config:
+        - { version: "3.9" }
         tox-environment: [ "docker-tests", "lint", "docs", "mypy", "mypyinstalled", "tracecontext" ]
       fail-fast: false
+    env:
+      python: py${{ matrix.config.version }}
     runs-on: ubuntu-20.04
     steps:
     - name: Checkout
@@ -52,28 +61,30 @@ jobs:
     - name: Set up QEMU
       id: qemu
       uses: docker/setup-qemu-action@v1
-    - name: Set up Python ${{ env[matrix.python-version] }}
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ env[matrix.python-version] }}
-        architecture: 'aarch64'
     - name: Test Misc
       run: |
             docker run --rm -v ${{ github.workspace }}:/io:rw --workdir=/io \
             arm64v8/ubuntu \
             bash -exc 'apt-get update && \
-            uname -m && \
+            apt install software-properties-common -y && \
+            add-apt-repository ppa:deadsnakes/ppa -y && \
+            apt install -y ${{ env.python }} && \
+            apt install -y ${{ env.python }}-venv && \
+            ${{ env.python }} -m venv .env && \
+            source .env/bin/activate && \
             pip install --upgrade pip && \
             pip install -U tox && \
             tox -e ${{ matrix.tox-environment }} && \
             deactivate'
-
   build-contrib-arm64:
     strategy:
       matrix:
-        python-version: [ py36 ]
+        config:
+        - { version: "3.6" }
         package: ["instrumentation", "exporter"]
       fail-fast: false
+    env:
+      python: py${{ matrix.config.version }}
     runs-on: ubuntu-20.04
     steps:
     - name: Checkout
@@ -81,18 +92,18 @@ jobs:
     - name: Set up QEMU
       id: qemu
       uses: docker/setup-qemu-action@v1
-    - name: Set up Python ${{ env[matrix.python-version] }}
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ env[matrix.python-version] }}
-        architecture: 'aarch64'
     - name: Test contrib build
       run: |
             docker run --rm -v ${{ github.workspace }}:/io:rw --workdir=/io \
             arm64v8/ubuntu \
             bash -exc 'apt-get update && \
-            uname -m && \
+            apt install software-properties-common -y && \
+            add-apt-repository ppa:deadsnakes/ppa -y && \
+            apt install -y ${{ env.python }} && \
+            apt install -y ${{ env.python }}-venv && \
+            ${{ env.python }} -m venv .env && \
+            source .env/bin/activate && \
             pip install --upgrade pip && \
             pip install -U tox-factor && \
-            tox -f ${{ matrix.python-version }}-${{ matrix.package }} && \
+            tox -f ${{ env.python }}-${{ matrix.package }} && \
             deactivate'
